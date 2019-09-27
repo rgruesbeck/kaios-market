@@ -1,0 +1,26 @@
+{
+  "colors": {
+    "bodyBackground": "#afc0e1",
+    "textColor": "#000000"
+  },
+  "@@editor": [
+    {
+      "key": "colors",
+      "name": "Colors",
+      "icon": "🖌️",
+      "source": "colors.json",
+      "fields": [
+        {
+          "key": "bodyBackground",
+          "name": "App body background color",
+          "type": "color"
+        },
+        {
+          "key": "textColor",
+          "name": "Text color",
+          "type": "color"
+        }
+      ]
+    }
+  ]
+}

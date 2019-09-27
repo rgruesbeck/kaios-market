@@ -1,0 +1,15 @@
+{
+  "develop": {
+    "frontend": {
+      "path": ".",
+      "port": 9966,
+      "events": {
+        "started": "npm start",
+        "building": "koji-tools watching",
+        "built": "Server running at",
+        "build-error": "npm ERR!"
+      },
+      "startCommand": "npm start"
+    }
+  }
+}
