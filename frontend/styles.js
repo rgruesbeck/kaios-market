@@ -10,6 +10,10 @@ const styles = `
         color: ${Koji.config.colors.textColor};
     }
 
+    ul {
+      padding: 0;
+    }
+
     .container {
       display: flex;
       flex-direction: column;
@@ -25,10 +29,17 @@ const styles = `
       cursor: pointer;
     }
 
-    li {
+    .item-list {
+      list-style: none;
       margin: 5px;
       padding: 10px 0 10px 0;
       border-top: 1px dotted ${Koji.config.colors.textColor};
+      cursor: pointer;
+    }
+
+    .item-show {
+      margin-top: 5px;
+      border: 1px dotted ${Koji.config.colors.textColor};
     }
 
     .local {
@@ -37,6 +48,11 @@ const styles = `
 
     .notification {
       opacity: 0.5;
+    }
+
+    .form {
+      margin-top: 5px;
+      border: 1px dotted ${Koji.config.colors.textColor};
     }
 `;
 

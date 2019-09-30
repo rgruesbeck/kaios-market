@@ -158,7 +158,7 @@ class App {
                             <ul>
                             ${this.state.data.map(item => {
                                 return `
-                                    <li class="${item._id.includes('local') ? `local` : ``}" data-action="setView" data-view="detail" data-id="${item._id}">
+                                    <li class="item-list ${item._id.includes('local') ? `local` : ``}" data-action="setView" data-view="detail" data-id="${item._id}">
                                         ${Object.entries(item.data)
                                             .map(entry => ({
                                                 name: entry[0],
@@ -184,7 +184,7 @@ class App {
                     return `
                         <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
                         <div>
-                            <form>
+                            <form class="form">
                                 ${[...this.state.fields.values()].map(field => {
                                     return `
                                         <div>
@@ -206,7 +206,7 @@ class App {
                     let item = this.state.data.find(item => item._id === this.state.item)
                     return `
                         <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
-                        <div id="${item._id}">
+                        <div id="${item._id}" class="item-show">
                             <div id="date">${new Date(item.date).toLocaleString(this.config.settings.locale)}</div>
                             ${Object.entries(item.data)
                                 .map(entry => ({
