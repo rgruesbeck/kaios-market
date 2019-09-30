@@ -1,7 +1,10 @@
 {
   "settings": {
     "name": "Market",
-    "postButtonText": "Post",
+    "navigatePostButton": "navigate to post",
+    "submitPostButton": "submit post",
+    "loadMoreButton": "load more text",
+    "navigateMainButton": "navigate back to main",
     "locale": "en-US",
     "fontFamily": "Be Vietnam"
   },

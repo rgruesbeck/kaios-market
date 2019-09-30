@@ -12,9 +12,9 @@ class App {
         })
 
         this.state = {
-            view: 'detail',
+            view: 'main',
             notification: 'syncing...',
-            item: '089a1fb3-162d-4ccf-b52c-0ae77c006dfc',
+            item: '',
             fields: this.buildFields(config.fields),
             data: this.storage.sync()
         };
@@ -52,7 +52,7 @@ class App {
             })
         })
         .map(data => {
-            // create map
+            // create field map
             return new Map([
                 ...data
                 .map(field => {
@@ -114,6 +114,14 @@ class App {
 
             let data = Object.fromEntries(new FormData(form))
             this.postItem(data)
+        }
+
+        // load more
+        if (action === 'loadMore') {
+            this.storage.sync({
+                exclude: this.state.data
+                .map(item => item._id)
+            })
         }
     }
 

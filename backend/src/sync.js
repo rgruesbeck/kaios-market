@@ -18,20 +18,25 @@ export default function (app) {
     })
 
 
+    // delete records
     app.get('/syncx', async (req, res) => {
         const database = new Database();
         const rawPosts = await database.get('posts');
         rawPosts.forEach(p => {
             database.delete('posts', p._id)
         })
-        console.log(rawPosts.length)
     })
 
     app.get('/sync', async (req, res) => {
         const database = new Database();
         const rawPosts = await database.get('posts');
         const posts = rawPosts
-            .filter(a => a.data)
+            .filter(p => p.data)
+            .filter(p => {
+                return req.query.exclude ?
+                req.query.exclude.includes(p._id) :
+                true;
+            })
             .sort((a, b) => b.date - a.date)
             .slice(0, 20);
 

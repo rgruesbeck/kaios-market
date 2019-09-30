@@ -66,7 +66,10 @@ class Storage {
 
     write(data) {
         // update local data
-        localStorage.setItem(this.local, JSON.stringify(data));
+        localStorage.setItem(this.local, JSON.stringify([
+            ...new Map(data.map(item => [item._id, item])).values()
+        ]));
+
         this.data = JSON.parse(localStorage.getItem(this.local));
 
         // broadcast update
@@ -78,18 +81,18 @@ class Storage {
     }
 
     // sync with server
-    sync() {
+    sync(opts) {
         // skip if not online
         let online = window.navigator.onLine;
         if (!online) { return this.list(); }
 
         this.syncUp();
-        this.syncDown();
+        this.syncDown(opts);
 
         return this.list();
     }
 
-    // syncUp and emit event when done
+    // syncUp
     syncUp() {
         // upload posts: unless no posts to upload
         this.data
@@ -133,19 +136,24 @@ class Storage {
         })
     }
 
-    // syncDown and emit event when done
-    syncDown() {
-        // fetch latest 20: unless recently synced
-        // fetch later than
-        fetch(`${this.server}/sync`)
+    // syncDown
+    syncDown(params = {}) {
+        let url = [...Object.entries(params)]
+        .filter(entry => entry.length === 2)
+        .reduce((URL, param) => {
+            URL.searchParams.append(param[0], param[1])
+
+            return URL;
+        }, new URL(`${this.server}/sync`))
+
+        fetch(url)
         .then((response) => response.json())
         .then(res => {
 
             // update local data
             this.write([
-                ...res.posts,
-                ...this.data
-                .filter(item => item._id.includes('local'))
+                ...this.data,
+                ...res.posts
             ]);
 
             // broadcast success
