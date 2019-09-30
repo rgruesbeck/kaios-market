@@ -1,18 +1,23 @@
-# base
-A base
+# Market
+A market app for KaiOS
 
 ## VCCs
 > VCCs (Visual Customization Controls) help make your app easy for no-code creators to remix your app.
 - ⚙️ An example VCC for changing the app name.
     * [settings.json](#~/.koji/customization/settings.json!visual)
+    * [fields.json](#~/.koji/customization/fields.json!visual)
     * [colors.json](#~/.koji/customization/colors.json!visual)
 
 ## Files
-- [index.html](#~/index.html) main html file for the app.
-- [index.js](#~/index.js) javascript entrypoint file.
-- [apps.js](#~/app.js) app code.
-- [styles.js](#~/styles.js) app styles.
-- [storage.js](#~/storage.js) storage code.
+### Frontend
+- [index.html](#~/frontend/index.html) main html file for the app.
+- [index.js](#~/frontend/index.js) javascript entry-point file.
+- [apps.js](#~/frontend/app.js) app code.
+- [styles.js](#~/frontend/styles.js) app styles.
+- [storage.js](#~/frontend/storage.js) storage code.
+### Backend
+- [server.js](#~/backend/server.js) main server.
+- [sync.js](#~/backend/sync.js) sync code.
 
 ## Dependencies
 - [browserfiy + babel](http://browserify.org/) use require('modules') in the browser.
