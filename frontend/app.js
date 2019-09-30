@@ -70,6 +70,8 @@ class App {
         this.root.addEventListener('app-message', (event) => {
             let message = event.detail;
 
+            console.log('message', message);
+
             if (message.from === 'storage') {
 
                 this.setState({

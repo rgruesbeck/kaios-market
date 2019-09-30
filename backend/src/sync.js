@@ -5,8 +5,8 @@ export default function (app) {
     app.post('/sync', async (req, res) => {
         const recordId = uuid.v4();
         const recordBody = {
-            date: req.body.date,
-            data: req.body.data
+            date: req.body.date || new Date().toISOString(),
+            data: req.body.data || {}
         };
 
         const database = new Database();
@@ -31,7 +31,7 @@ export default function (app) {
         const database = new Database();
         const rawPosts = await database.get('posts');
         const posts = rawPosts
-            .filter(p => p.data)
+            .filter(p => Object.keys(p.data).length > 0)
             .filter(p => {
                 return req.query.exclude ?
                 req.query.exclude.includes(p._id) :

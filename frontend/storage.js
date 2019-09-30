@@ -1,34 +1,33 @@
 class Storage {
     constructor({ local, server, messageBus }) {
-        this.data = [];
         this.local = local;
         this.server = server;
         this.messageBus = messageBus;
-
-        this.read();
+        console.log('local-data', this.read())
     }
 
     // return data
-    list() {
-        return this.read();
+    list(cb) {
+        return this.read()
+        .filter(item => cb ? cb(item) : true)
     }
 
     // add an item
     add(item) {
         return this.write([
             {
-                _id: `local-${Math.random().toString(16).slice(2)}`,
-                date: new Date().toISOString(),
+                _id: `local-${Math.random().toString(16).slice(2)}`, // create local id
+                date: new Date().toISOString(), // create time stamp
                 data: item
             },
-            ...this.data
+            ...this.read()
         ]);
     }
 
     // update item
     update(id, cb) {
         return this.write([
-            ...this.data
+            ...this.read()
             .map(item => {
                 if (item._id === id) {
                     return {
@@ -47,9 +46,9 @@ class Storage {
     // remove item by id
     remove(id) {
         return this.write([
-            ...this.data
+            ...this.read()
             .filter(item => {
-                return item.id !== id
+                return item._id !== id
             })
         ]);
     }
@@ -61,7 +60,7 @@ class Storage {
 
     // read and write to localStorage
     read() {
-        return this.data || [];
+        return JSON.parse(localStorage.getItem(this.local)|| "[]");
     }
 
     write(data) {
@@ -69,8 +68,6 @@ class Storage {
         localStorage.setItem(this.local, JSON.stringify([
             ...new Map(data.map(item => [item._id, item])).values()
         ]));
-
-        this.data = JSON.parse(localStorage.getItem(this.local));
 
         // broadcast update
         this.broadcast({
@@ -94,8 +91,7 @@ class Storage {
 
     // syncUp
     syncUp() {
-        // upload posts: unless no posts to upload
-        this.data
+        this.read()
         .filter(item => item._id.includes('local'))
         .forEach(item => {
             fetch(`${this.server}/sync`, {
@@ -152,7 +148,8 @@ class Storage {
 
             // update local data
             this.write([
-                ...this.data,
+                ...this.read()
+                .filter(item => item._id.includes('local')),
                 ...res.posts
             ]);
 
