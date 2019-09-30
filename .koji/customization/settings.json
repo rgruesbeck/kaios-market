@@ -1,6 +1,7 @@
 {
   "settings": {
-    "name": "base",
+    "name": "Market",
+    "postButtonText": "Post",
     "locale": "en-US",
     "fontFamily": "Be Vietnam"
   },

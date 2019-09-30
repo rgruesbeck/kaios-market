@@ -25,9 +25,18 @@ const styles = `
       cursor: pointer;
     }
 
-    .list {
+    li {
+      margin: 5px;
       padding: 10px 0 10px 0;
       border-top: 1px dotted ${Koji.config.colors.textColor};
+    }
+
+    .local {
+      background-color: rgba(225, 225, 225, 0.5);
+    }
+
+    .notification {
+      opacity: 0.5;
     }
 `;
 

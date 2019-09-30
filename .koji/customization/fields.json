@@ -1,0 +1,44 @@
+{
+  "fields": {
+    "fieldNames": "title, description, contact",
+    "fieldLabels": "Enter the title, Enter a description, Enter contact information",
+    "fieldTypes": "string, string, string",
+    "fieldListDisplay": "true, true, false",
+    "fieldShowDisplay": "true, true, true"
+  },
+  "@@editor": [
+    {
+      "key": "fields",
+      "name": "Fields",
+      "icon": "ℹ️",
+      "source": "fields.json",
+      "fields": [
+        {
+          "key": "fieldNames",
+          "name": "Field Names",
+          "type": "text"
+        },
+        {
+          "key": "fieldLabels",
+          "name": "Field Labels",
+          "type": "text"
+        },
+        {
+          "key": "fieldTypes",
+          "name": "Field Types",
+          "type": "text"
+        },
+        {
+          "key": "fieldListDisplay",
+          "name": "Field List Display",
+          "type": "text"
+        },
+        {
+          "key": "fieldShowDisplay",
+          "name": "Field Show Display",
+          "type": "text"
+        }
+      ]
+    }
+  ]
+}
