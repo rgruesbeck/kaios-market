@@ -1,10 +1,10 @@
 {
   "settings": {
     "name": "Market",
-    "navigatePostButton": "navigate to post",
-    "submitPostButton": "submit post",
-    "loadMoreButton": "load more text",
-    "navigateMainButton": "navigate back to main",
+    "navigateMainButton": "Market",
+    "navigatePostButton": "Post",
+    "submitPostButton": "Submit Post",
+    "loadMoreButton": "Load More",
     "locale": "en-US",
     "fontFamily": "Be Vietnam"
   },
@@ -18,6 +18,26 @@
         {
           "key": "name",
           "name": "App name",
+          "type": "text"
+        },
+        {
+          "key": "navigateMainButton",
+          "name": "Navigate to Main View Button",
+          "type": "text"
+        },
+        {
+          "key": "navigatePostButton",
+          "name": "Navigate to Post View Button",
+          "type": "text"
+        },
+        {
+          "key": "submitPostButton",
+          "name": "Submit Post Button",
+          "type": "text"
+        },
+        {
+          "key": "loadMoreButton",
+          "name": "Load More Button",
           "type": "text"
         },
         {

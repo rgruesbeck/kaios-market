@@ -71,6 +71,7 @@ class App {
             let message = event.detail;
 
             if (message.from === 'storage') {
+
                 this.setState({
                     data: this.storage.list()
                 })
@@ -132,23 +133,17 @@ class App {
     }
 
     setState(state) {
-        // create updates
-        let updates = {
-            ...this.state,
-            ...state
-        }
-
-        // reject non-changes
-        if (JSON.stringify(updates) === JSON.stringify(this.state)) { return; }
+        console.log(state)
 
         // update state and re-render
-        this.state = updates;
+        this.state = {
+            ...this.state,
+            ...state
+        };
         this.render();
     }
 
     render() {
-        console.log(this)
-
         this.root.innerHTML = `
         <div class="container">
             <div class="notification">${this.state.notification || ''}</div>
@@ -157,8 +152,8 @@ class App {
                 if (view === 'main') {
                     return `
                         <h1>${this.config.settings.name}</h1>
-                        <button data-action="setView" data-view="post">${this.config.settings.postButtonText}</button>
-                        <button data-action="loadMore">load more</button>
+                        <button data-action="setView" data-view="post">${this.config.settings.navigatePostButton}</button>
+                        <button data-action="loadMore">${this.config.settings.loadMoreButton}</button>
                         <div>
                             <ul>
                             ${this.state.data.map(item => {
@@ -187,7 +182,7 @@ class App {
                 // post view
                 if (view === 'post') {
                     return `
-                        <button data-action="setView" data-view="main">back</button>
+                        <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
                         <div>
                             <form>
                                 ${[...this.state.fields.values()].map(field => {
@@ -199,7 +194,7 @@ class App {
                                     `
                                 }).join('')}
                                 <div>
-                                    <input data-action="postItem" type="button" value="${this.config.settings.postButtonText}"/>
+                                    <input data-action="postItem" type="button" value="${this.config.settings.submitPostButton}"/>
                                 </div>
                             </form>
                         </div>
@@ -210,7 +205,7 @@ class App {
                 if (view === 'detail') {
                     let item = this.state.data.find(item => item._id === this.state.item)
                     return `
-                        <button data-action="setView" data-view="main">back-vcc</button>
+                        <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
                         <div id="${item._id}">
                             <div id="date">${new Date(item.date).toLocaleString(this.config.settings.locale)}</div>
                             ${Object.entries(item.data)
