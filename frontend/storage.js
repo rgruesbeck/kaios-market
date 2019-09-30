@@ -3,7 +3,6 @@ class Storage {
         this.local = local;
         this.server = server;
         this.messageBus = messageBus;
-        console.log('local-data', this.read())
     }
 
     // return data

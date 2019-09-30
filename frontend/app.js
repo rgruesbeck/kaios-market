@@ -70,8 +70,6 @@ class App {
         this.root.addEventListener('app-message', (event) => {
             let message = event.detail;
 
-            console.log('message', message);
-
             if (message.from === 'storage') {
 
                 this.setState({
@@ -135,13 +133,13 @@ class App {
     }
 
     setState(state) {
-        console.log(state)
 
         // update state and re-render
         this.state = {
             ...this.state,
             ...state
         };
+
         this.render();
     }
 
