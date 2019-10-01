@@ -29,12 +29,7 @@ class Storage {
             ...this.read()
             .map(item => {
                 if (item._id === id) {
-                    return {
-                        ...item,
-                        ...{
-                            data: cb(item.data)
-                        }
-                    }
+                    return cb(item)
                 } else {
                     return item
                 }
@@ -78,6 +73,7 @@ class Storage {
 
     // sync with server
     sync(opts) {
+        console.log('syncing')
         // skip if not online
         let online = window.navigator.onLine;
         if (!online) { return this.list(); }
@@ -103,7 +99,15 @@ class Storage {
             .then((response) => response.json())
             .then((jsonResponse) => {
                 if (jsonResponse.success) {
-                    this.remove(item._id);
+                    // update item as synced
+                    this.update(item._id, (syncedItem) => {
+                        return {
+                            ...syncedItem,
+                            ...{
+                                _id: jsonResponse._id
+                            }
+                        }
+                    })
 
                     // broadcast success
                     this.broadcast({

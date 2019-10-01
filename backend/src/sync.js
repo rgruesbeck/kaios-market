@@ -14,6 +14,7 @@ export default function (app) {
 
         res.status(200).json({
             success: true,
+            _id: recordId
         });
     })
 

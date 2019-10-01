@@ -71,6 +71,7 @@ class App {
             let message = event.detail;
 
             if (message.from === 'storage') {
+                console.log('storage message');
 
                 this.setState({
                     data: this.storage.list()
@@ -106,6 +107,11 @@ class App {
                 view: view,
                 item: id
             });
+
+            // if view is main, attempt sync
+            if (view === 'main') {
+                this.loadMore();
+            }
         }
 
         // post item
@@ -131,18 +137,29 @@ class App {
 
         // load more
         if (action === 'loadMore') {
-            this.storage.sync({
-                exclude: this.state.data
-                .map(item => item._id)
-            })
+            this.loadMore();
         }
     }
 
     postItem(data) {
+        // store new post locally
+        // navigate back to main view
         this.setState({
+            view: 'main',
             data: this.storage.add(data)
-        })
+        });
+
+        // sync up
+        this.storage.syncUp();
     }
+
+    loadMore() {
+        this.storage.sync({
+            exclude: this.state.data
+            .map(item => item._id)
+        });
+    }
+
 
     setState(state) {
 
@@ -156,6 +173,7 @@ class App {
     }
 
     render() {
+        console.log(this)
         this.root.innerHTML = `
         <div class="container">
             <div class="notification">${this.state.notification || ''}</div>
@@ -168,7 +186,9 @@ class App {
                         <button data-action="loadMore">${this.config.settings.loadMoreButton}</button>
                         <div>
                             <ul>
-                            ${this.state.data.map(item => {
+                            ${this.state.data
+                                .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+                                .map(item => {
                                 return `
                                     <li class="item-list ${item._id.includes('local') ? `local` : ``}" data-action="setView" data-view="detail" data-id="${item._id}">
                                         ${Object.entries(item.data)
@@ -192,6 +212,8 @@ class App {
                 }
 
                 // post view
+                // todo: image upload
+                // <input type="file" accept="image/*" capture></input>
                 if (view === 'post') {
                     return `
                         <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
