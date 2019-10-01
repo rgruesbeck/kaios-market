@@ -19,7 +19,8 @@ export default function (app) {
     })
 
 
-    // delete records
+    // dev: delete records
+    /*
     app.get('/syncx', async (req, res) => {
         const database = new Database();
         const rawPosts = await database.get('posts');
@@ -27,10 +28,12 @@ export default function (app) {
             database.delete('posts', p._id)
         })
     })
+    */
 
     app.get('/sync', async (req, res) => {
         const database = new Database();
         const rawPosts = await database.get('posts');
+
         const posts = rawPosts
             .filter(p => Object.keys(p.data).length > 0)
             .filter(p => {
@@ -39,7 +42,7 @@ export default function (app) {
                 true;
             })
             .sort((a, b) => b.date - a.date)
-            .slice(0, 20);
+            .slice(0, req.query.length ? parseInt(req.query.length) : 20);
 
         res.status(200).json({
             success: true,

@@ -71,7 +71,6 @@ class App {
             let message = event.detail;
 
             if (message.from === 'storage') {
-                console.log('storage message');
 
                 this.setState({
                     data: this.storage.list()
@@ -154,7 +153,13 @@ class App {
     }
 
     loadMore() {
-        this.storage.sync({
+        this.setState({
+            notification: 'syncing...'
+        });
+
+        // sync down
+        this.storage.syncDown({
+            length: parseInt(this.config.settings.loadMoreAmount),
             exclude: this.state.data
             .map(item => item._id)
         });
@@ -173,40 +178,37 @@ class App {
     }
 
     render() {
-        console.log(this)
         this.root.innerHTML = `
         <div class="container">
-            <div class="notification">${this.state.notification || ''}</div>
+            <div class="mui-appbar">
+                <h1 data-action="setView" data-view="main">${this.config.settings.name}</h1>
+            </div>
+            <div class="mui--text-subhead notification">${this.state.notification}</div>
+
             ${(view => {
                 // main view
                 if (view === 'main') {
                     return `
-                        <h1>${this.config.settings.name}</h1>
-                        <button data-action="setView" data-view="post">${this.config.settings.navigatePostButton}</button>
-                        <button data-action="loadMore">${this.config.settings.loadMoreButton}</button>
-                        <div>
+                        <button data-action="setView" data-view="post" class="mui-btn--small mui-btn mui-btn--fab mui-btn--primary activate-btn add-button">+</button>
+                        <div class="list-wrapper">
                             <ul>
                             ${this.state.data
                                 .sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
                                 .map(item => {
                                 return `
-                                    <li class="item-list ${item._id.includes('local') ? `local` : ``}" data-action="setView" data-view="detail" data-id="${item._id}">
-                                        ${Object.entries(item.data)
-                                            .map(entry => ({
-                                                name: entry[0],
-                                                value: entry[1],
-                                                display: this.state.fields.get(entry[0]).display
-                                            }))
+                                    <li class="list-item ${item._id.includes('local') ? `local` : ``}" data-action="setView" data-view="detail" data-id="${item._id}">
+                                        ${[...this.state.fields.values()]
                                             .filter(field => field.display.list)
-                                            .map(field => {
-                                            return `
-                                                <div data-action="setView" data-view="detail" data-id="${item._id}">${field.value}</div>
-                                            `
-                                        }).join('')}
+                                            .map((field, idx) => {
+                                                return `
+                                                    <div data-action="setView" data-view="detail" data-id="${item._id}" class="mui--text-${idx === 0 ? `headline header` : `subhead`}">${item.data[field.name]}</div>
+                                                `;
+                                            }).join('')}
                                     </li>
-                                `
+                                `;
                             }).join('')}
                             </ul>
+                        <button data-action="loadMore" class="mui-btn mui-btn--raised load-button">${this.config.settings.loadMoreButton}</button>
                         </div>
                     `
                 }
@@ -214,21 +216,21 @@ class App {
                 // post view
                 // todo: image upload
                 // <input type="file" accept="image/*" capture></input>
+                // <button data-action="setView" data-view="main" class="mui-btn mui-btn--primary">${this.config.settings.navigateMainButton}</button>
                 if (view === 'post') {
                     return `
-                        <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
-                        <div>
-                            <form class="form">
+                        <div class="mui-container">
+                            <form class="mui-form">
                                 ${[...this.state.fields.values()].map(field => {
                                     return `
-                                        <div>
+                                        <div class="mui-textfield">
                                             <label for="${field.name}">${field.label}</label>
                                             <input type="${field.type}" name="${field.name}" id="${field.name}" required>
                                         </div>
                                     `
                                 }).join('')}
                                 <div>
-                                    <input data-action="postItem" type="button" value="${this.config.settings.submitPostButton}"/>
+                                    <input data-action="postItem" type="button" value="${this.config.settings.submitPostButton}" class="mui-btn mui-btn full-width-btn submit-btn button"/>
                                 </div>
                             </form>
                         </div>
@@ -236,28 +238,32 @@ class App {
                 }
 
                 // detail view
+                // <button data-action="setView" data-view="main" class="mui-btn mui-btn--primary">${this.config.settings.navigateMainButton}</button>
                 if (view === 'detail') {
                     let item = this.state.data.find(item => item._id === this.state.item)
                     return `
-                        <button data-action="setView" data-view="main">${this.config.settings.navigateMainButton}</button>
-                        <div id="${item._id}" class="item-show">
-                            <div id="date">${new Date(item.date).toLocaleString(this.config.settings.locale)}</div>
-                            ${Object.entries(item.data)
-                                .map(entry => ({
-                                    name: entry[0],
-                                    value: entry[1],
-                                    display: this.state.fields.get(entry[0]).display
-                                }))
+                        <div id="${item._id}" class="mui-container">
+                            <div id="date" class="date">${new Date(item.date).toLocaleString(this.config.settings.locale)}</div>
+                            ${[...this.state.fields.values()]
                                 .filter(field => field.display.show)
-                                .map(field => {
-                                return `
-                                    <div id="${field.name}">${field.value}</div>
-                                `
-                            }).join('')}
+                                .map((field, idx) => {
+                                    return idx === 0 ? `
+                                        <div id="${field.name}" class="mui--text-headline header">
+                                            <div>${item.data[field.name]}</div>
+                                        </div>
+                                    ` :
+                                    `
+                                        <div id="${field.name}" class="mui--text-subhead">
+                                            <div class="subhead">${field.name}</div>
+                                            <div>${item.data[field.name]}</div>
+                                        </div>
+                                    `;
+                                }).join('')}
                         </div>
                     `
                 }
             })(this.state.view)}
+
         </div>
         `
     }

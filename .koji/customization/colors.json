@@ -1,7 +1,9 @@
 {
   "colors": {
-    "bodyBackground": "#afc0e1",
-    "textColor": "#000000"
+    "bodyBackground": "#ecf0f1",
+    "primaryColor": "#16a085",
+    "secondaryColor": "#f1c40f",
+    "textColor": "#2c3e50"
   },
   "@@editor": [
     {

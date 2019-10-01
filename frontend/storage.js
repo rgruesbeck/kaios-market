@@ -73,11 +73,6 @@ class Storage {
 
     // sync with server
     sync(opts) {
-        console.log('syncing')
-        // skip if not online
-        let online = window.navigator.onLine;
-        if (!online) { return this.list(); }
-
         this.syncUp();
         this.syncDown(opts);
 
@@ -86,6 +81,19 @@ class Storage {
 
     // syncUp
     syncUp() {
+        // off line check
+        let online = window.navigator.onLine;
+        if (!online) {
+            // offline
+            this.broadcast({
+                action: 'syncUp',
+                success: false,
+                error: 'off-line'
+            })
+
+            return;
+        }
+
         this.read()
         .filter(item => item._id.includes('local'))
         .forEach(item => {
@@ -137,6 +145,20 @@ class Storage {
 
     // syncDown
     syncDown(params = {}) {
+        // off line check
+        let online = window.navigator.onLine;
+        if (!online) {
+            // offline
+            this.broadcast({
+                action: 'syncDown',
+                success: false,
+                error: 'off-line'
+            })
+
+            return;
+        }
+
+        // build url
         let url = [...Object.entries(params)]
         .filter(entry => entry.length === 2)
         .reduce((URL, param) => {

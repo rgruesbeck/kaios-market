@@ -1,6 +1,7 @@
 {
   "settings": {
     "name": "Market",
+    "loadMoreAmount": "10",
     "navigateMainButton": "Market",
     "navigatePostButton": "Post",
     "submitPostButton": "Submit Post",
@@ -19,6 +20,11 @@
           "key": "name",
           "name": "App name",
           "type": "text"
+        },
+        {
+          "key": "loadMoreAmount",
+          "name": "Amount of Posts to load when loading more",
+          "type": "number"
         },
         {
           "key": "navigateMainButton",
