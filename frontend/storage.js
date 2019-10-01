@@ -181,4 +181,4 @@ class Storage {
     }
 }
 
-module.exports.default = Storage;
+export default Storage;

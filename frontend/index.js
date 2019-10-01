@@ -1,7 +1,7 @@
-const Koji = require('@withkoji/vcc').default;
-const WebFont = require('webfontloader');
-const styles = require('./styles.js').default;
-const App = require('./app.js').default;
+import Koji from '@withkoji/vcc';
+import WebFont from 'webfontloader';
+import styles from './styles.js';
+import App from './app.js';
 
 // Load a Google Web Font
 const loadWebFont = () => {

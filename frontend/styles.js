@@ -56,4 +56,4 @@ const styles = `
     }
 `;
 
-module.exports.default = styles;
+export default styles;

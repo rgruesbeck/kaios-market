@@ -1,4 +1,4 @@
-const Storage = require('./storage.js').default;
+import Storage from './storage.js';
 
 class App {
     constructor(root, config) {
@@ -229,4 +229,4 @@ class App {
     }
 }
 
-module.exports.default = App;
+export default App;
