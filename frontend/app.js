@@ -113,8 +113,20 @@ class App {
             let { form } = details;
             if (!form || !form.checkValidity()) { return; }
 
-            let data = Object.fromEntries(new FormData(form))
-            this.postItem(data)
+            // not available on KaiOS but made it through browserslist
+            // let newData = Object.fromEntries(new FormData(form))
+            
+            let newData = [new FormData(form)]
+            .map(formData => [...formData.entries()])
+            .map(entries => {
+                return entries
+                .reduce((data, entry) => {
+                    data[entry[0]] = entry[1];
+                    return data;
+                }, {})
+            }).reduce(r => r);
+
+            this.postItem(newData)
         }
 
         // load more
